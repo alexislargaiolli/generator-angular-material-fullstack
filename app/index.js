@@ -269,7 +269,8 @@ var AngularMaterialFullstackGenerator = yeoman.generators.Base.extend({
       "'ngResource'",
       "'ngSanitize'",
       "'ngAnimate'",
-      "'ngMessages'"
+      "'ngMessages'",
+      "'md.data.table'"
     ];
 
     if(this.filters.ngroute) angModules.push("'ngRoute'");
