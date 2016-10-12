@@ -4,6 +4,7 @@ var User = require('./user.model');
 var passport = require('passport');
 var config = require('../../config/environment');
 var jwt = require('jsonwebtoken');
+var _ = require('lodash');
 
 var validationError = function(res, err) {
   return res.status(422).json(err);
@@ -18,6 +19,51 @@ exports.index = function(req, res) {
     if(err) return res.status(500).send(err);
     res.status(200).json(users);
   });
+};
+
+exports.paginate = function(req, res) {
+    var queryFind = User.find();
+    var queryCount = User.count();
+    if (req.query.limit) {
+        queryFind.limit(req.query.limit);
+    }
+    if (req.query.page) {
+        var skip = (req.query.page - 1) * req.query.limit;        
+        queryFind.skip(skip);
+    }
+    if (req.query.order) {
+        queryFind.sort(req.query.order);
+    }
+    queryCount.exec(function(err, count) {
+        if (err) {
+            return res.status(500);
+        }
+        queryFind.exec(function(err, users) {
+            if (err) {
+                return res.status(500);
+            }
+            return res.status(200).json({ count: count, datas: users });
+        });
+    });
+};
+
+exports.update = function(req, res) {
+    if (req.body._id) { delete req.body._id; }
+    User.findById(req.params.id, function(err, user) {
+        if (err) {
+            return res.status(500);
+        }
+        if (!user) {
+            return res.status(404).send('Not Found');
+        }
+        var updated = _.merge(user, req.body);
+        updated.save(function(err) {
+            if (err) {
+                return res.status(500);
+            }
+            return res.status(200).json(user);
+        });
+    });
 };
 
 /**

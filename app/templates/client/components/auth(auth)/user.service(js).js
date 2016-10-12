@@ -17,6 +17,10 @@ angular.module('<%= scriptAppName %>')
         params: {
           id:'me'
         }
+      },
+      paginate: {
+        method:'GET', 
+        url: '/api/users/paginate'
       }
 	  });
   });

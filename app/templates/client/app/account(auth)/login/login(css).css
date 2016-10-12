@@ -3,10 +3,10 @@
   margin: 0 auto;
 }
 
-.love-message {
-  margin-top: 64px;
-  text-align: center;
+.login-card md-card-title{
+  cursor:pointer;
 }
+
 /*
 
 <% if (filters.oauth) { %><% if (filters.facebookAuth) { %>.btn-facebook {

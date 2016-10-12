@@ -11,13 +11,29 @@
       </div>
       <% } %>
     </md-toolbar>
-    <md-content layout-padding>
-
+    <md-content>
+      <md-list flex>
+        <% if(filters.auth) {%>
+        <md-list-item ui-sref="admin" ng-if="isAdmin()">
+          <md-icon md-svg-icon="action:settings" class="md-avatar-icon"></md-icon>
+          <div class="md-list-item-text" flex>
+            Administration  
+          </div>
+        </md-list-item>
+        <md-list-item ui-sref="admin.user" ng-if="isAdmin()">
+          <md-icon md-svg-icon="action:face" class="md-avatar-icon"></md-icon>
+          <div class="md-list-item-text" flex>
+            Utilisateurs
+          </div>
+        </md-list-item>
+        <% } %>
+      </md-list>
+    </md-content>
     </md-content>
   </md-sidenav>
   <md-toolbar>
     <div class="md-toolbar-tools">
-      <md-button ng-click="toggleLeft()" class="md-icon-button" aria-label="Settings">
+      <md-button ng-click="toggleLeft()" class="md-icon-button" aria-label="Settings" <% if(filters.auth) {%> ng-if="isLoggedIn()" <% } %>>
         <md-icon md-svg-icon="assets/icons/menu.svg"></md-icon>
       </md-button>
       <h2>
@@ -28,33 +44,15 @@
         <md-button aria-label="Open phone interactions menu" class="md-icon-button" ng-click="openMenu($mdOpenMenu, $event)">
           <md-icon md-menu-origin md-svg-icon="assets/icons/dots-vertical.svg"></md-icon>
         </md-button>
-        <md-menu-content width="4">
-          <md-menu-item>
-            <md-button ng-click="showAddDialog($event)">
-              <md-icon md-svg-icon="content:add" md-menu-align-target></md-icon>
-              Add
-            </md-button>
-          </md-menu-item>
-          <md-menu-item>
-            <md-button ng-click="redial($event)">
-              <md-icon md-svg-icon="communication:dialpad" md-menu-align-target></md-icon>
-              Redial
-            </md-button>
-          </md-menu-item>
-          <md-menu-item>
-            <md-button disabled="disabled" ng-click="checkVoicemail()">
-              <md-icon md-svg-icon="communication:voicemail"></md-icon>
-              Check voicemail
-            </md-button>
-          </md-menu-item>
-          <md-menu-item>
-            <md-button ng-click="toggleNotifications()">
-              <md-icon md-svg-icon="social:notifications{{notificationsEnabled ? '_off' : ''}}"></md-icon>
-              {{notificationsEnabled ? 'Disable' : 'Enable' }} notifications
-            </md-button>
-          </md-menu-item>
+        <md-menu-content width="4">                
           <% if(filters.auth) {%>
-          <md-menu-divider></md-menu-divider>
+          <md-menu-item ng-show="isLoggedIn()">
+            <md-button ui-sref="settings">
+              <md-icon md-svg-icon="action:account_circle"></md-icon>
+              Mon profil
+            </md-button>
+          </md-menu-item> 
+          <md-menu-divider <% if(filters.auth) {%> ng-if="isLoggedIn()" <% } %>></md-menu-divider>
           <md-menu-item ng-hide="isLoggedIn()" <% if (filters.uirouter) { %>ui-sref="login"<% } else { %>href="/login"<% } %>>
             <md-button>
               <md-icon md-svg-icon="action:input"></md-icon>
